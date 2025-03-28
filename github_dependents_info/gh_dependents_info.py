@@ -218,6 +218,9 @@ class GithubDependentsInfo:
                 package_name = a.find("span").text.strip()
                 if "{{" in package_name:
                     continue
+                if ".github/" in package_name or "github.com/" in package_name:
+                    logging.warning(f"------Skipping {package_name} as it is a GitHub default package------")
+                    continue
                 if self.debug is True:
                     logging.info(package_name)
                 self.packages += [{"id": package_id, "name": package_name}]
