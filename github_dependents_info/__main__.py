@@ -46,6 +46,12 @@ def main(
         "--json",
         help="Output in JSON format",
     ),
+    csv_output: bool = typer.Option(
+        False,
+        "-C",
+        "--csv",
+        help="Output in CSV format",
+    ),
     csv_directory: str = typer.Option(
         None,
         "-c",
@@ -104,6 +110,7 @@ def main(
             sort_key=sort_key,
             min_stars=min_stars,
             json_output=json_output,
+            csv_output=csv_output,
             csv_directory=csv_directory,
             badge_markdown_file=badge_markdown_file,
             doc_url=doc_url,

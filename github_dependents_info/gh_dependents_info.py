@@ -3,6 +3,7 @@ import time
 import logging
 import os
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -24,6 +25,7 @@ class GithubDependentsInfo:
         self.sort_key = "name" if "sort_key" not in options else options["sort_key"]
         self.min_stars = None if "min_stars" not in options else options["min_stars"]
         self.json_output = True if "json_output" in options and options["json_output"] is True else False
+        self.csv_output = True if "csv_output" in options and options["csv_output"] is True else False
         self.merge_packages = True if "merge_packages" in options and options["merge_packages"] is True else False
         self.doc_url = options["doc_url"] if "doc_url" in options else None
         self.markdown_file = options["markdown_file"] if "markdown_file" in options else None
@@ -321,6 +323,10 @@ class GithubDependentsInfo:
     def print_result(self):
         if self.json_output is True:
             print(json.dumps(self.result, indent=4))
+        elif self.csv_output is True:
+            if len(self.all_public_dependent_repos) > 0:
+                df = pd.DataFrame(self.all_public_dependent_repos)[["name", "owner", "repo_name", "stars"]]
+                df.to_csv(sys.stdout, index=False)
         else:
             print("Total: " + str(self.total_sum))
             print("Public: " + str(self.total_public_sum) + " (" + str(self.total_stars_sum) + " stars)")
